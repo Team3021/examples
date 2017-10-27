@@ -7,17 +7,22 @@ public class RestaurantApp {
 		
 		RestuarantAppCommandLineInput input = new RestuarantAppCommandLineInput();
 		
-		String restaurantName = input.getUserInput("Hello, please input the name of your restaurant.");
+		System.out.println("Hello");
 		
 		// create a restaurant object
 		// Type <<variable>> = constructor method of a class
 		Restaurant restaurant = new Restaurant();
 		
-		// giving a string object to the restaurant object
+		// Get the restaurant name from user
+		String restaurantName = input.getUserInput("Please input the name of your restaurant:");
 		restaurant.setName(restaurantName);
 		
-		System.out.println("Thank you, welcome to " + restaurantName);
+		// Get the restaurant owner's name from user
+		String ownersName = input.getUserInput("Please input the owner's name of the restaurant.");
+		restaurant.setOwnersName(ownersName);
+		
 		System.out.println("Thank you, welcome to " + restaurant.getName());
+		System.out.println("Restaurant owner is: " + restaurant.getOwnersName());
 	}
 	
 }

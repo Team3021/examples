@@ -1,29 +1,13 @@
-
 package edu.team3021.restaurant;
 
-//import java.util.Scanner (scanner)
-
-import java.util.Scanner;
 
 public class RestaurantApp {
 
 	public static void main (String args[]) {
 		
-		//run print line; request resturant name
+		RestuarantAppCommandLineInput input = new RestuarantAppCommandLineInput();
 		
-		System.out.println("Hello, please input the name of your restaurant.");
-		
-		
-		//run scanner
-		Scanner scanner = new Scanner( System.in );
-		
-		String restaurantName = scanner.nextLine();
-		
-		//close scanner
-		scanner.close();
-
-		
-		
+		String restaurantName = input.getUserInput("Hello, please input the name of your restaurant.");
 		
 		// create a restaurant object
 		// Type <<variable>> = constructor method of a class

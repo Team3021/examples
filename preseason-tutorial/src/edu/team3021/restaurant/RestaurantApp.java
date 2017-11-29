@@ -23,6 +23,10 @@ public class RestaurantApp {
 		
 		System.out.println("Thank you, welcome to " + restaurant.getName());
 		System.out.println("Restaurant owner is: " + restaurant.getOwnersName());
+		
+		ResturantAppOrder order = new ResturantAppOrder();
+		order.OrderCreator();
+		order.getOrder();
 	}
 	
 }

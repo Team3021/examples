@@ -6,8 +6,8 @@ public class ResturantOrderTotal {
 	double total = 0;
 	final double cheeseburger = 3.50;
 	public void findTotal(ArrayList<String> a){
+		System.out.println("Steph got it!");
 		for(String b:a) {
-			System.out.println("This is the Order total class ;)");
 			System.out.println(b);
 		}
 	}

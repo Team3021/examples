@@ -27,6 +27,10 @@ public class RestaurantApp {
 		ResturantAppOrder order = new ResturantAppOrder();
 		order.OrderCreator();
 		order.getOrder();
+		
+		ResturantOrderTotal orderTotal = new ResturantOrderTotal();
+		orderTotal.findTotal(order.getOrderList());
+		
 	}
 	
 }

@@ -77,7 +77,9 @@ public class Robot extends SampleRobot implements PIDOutput {
     	myRobot.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
     	
         myRobot.setExpiration(0.1);
+        
         stick = new Joystick(0);
+        
         try {
 			/***********************************************************************
 			 * navX-MXP:
@@ -149,7 +151,9 @@ public class Robot extends SampleRobot implements PIDOutput {
                 turnController.setSetpoint(-90.0f);
                 rotateToAngle = true;
             }
+            
             double currentRotationRate;
+            
             if ( rotateToAngle ) {
                 turnController.enable();
                 currentRotationRate = rotateToAngleRate;

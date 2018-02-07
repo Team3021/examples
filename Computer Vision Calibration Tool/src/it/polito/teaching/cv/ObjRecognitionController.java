@@ -1,21 +1,15 @@
 package it.polito.teaching.cv;
 
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;
 
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -123,7 +117,10 @@ public class ObjRecognitionController
 		if (!this.cameraActive)
 		{
 			// start the video capture
-			this.capture.open(0);
+			this.capture.open(1);
+			this.capture.set(Videoio.CV_CAP_PROP_FRAME_WIDTH, 320);
+			this.capture.set(Videoio.CV_CAP_PROP_FRAME_HEIGHT, 240);
+			this.capture.set(Videoio.CV_CAP_PROP_XI_EXPOSURE, -10);
 			
 			// is the video stream available?
 			if (this.capture.isOpened())

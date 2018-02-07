@@ -13,7 +13,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-public class ObjRecognitionProcessor
+public class ObjRecognitionProcessor extends TargetScope
 {
 	private Mat blurredImage = new Mat();
 	private Mat hsvImage = new Mat();
@@ -36,6 +36,8 @@ public class ObjRecognitionProcessor
 	private double valueStop;
 	
 	private String valuesToPrint;
+	
+	private Scalar color = new Scalar(0,0,255);
 
 	/**
 	 * Given a binary image containing one or more closed surfaces, use it as a
@@ -52,20 +54,56 @@ public class ObjRecognitionProcessor
 		buildContourMask(frame);
 		
 		List<MatOfPoint> contours = new ArrayList<>();
+		List<Rect> rectangles = new ArrayList<>();
 
 		// find contours
 		Imgproc.findContours(contourFilter, contours, contouredImage, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
 
-	    for (int i = 0; i< contours.size(); i++) {
+		// filter contours by area and then by width and height
+		for (int i = 0; i < contours.size(); i++) {
+			if (Imgproc.contourArea(contours.get(i)) > 200 ) {
+				
+				Rect rect = Imgproc.boundingRect(contours.get(i));
+				
+//				System.out.println("rect.width = " + rect.width);
+//				System.out.println("rect.height = " + rect.height);
+				
+				if (isTargetStripe(rect)) {
+					rectangles.add(rect);
+				}
+			}
+		}
+		
+		Rect leftRect = null;
+		Rect rightRect = null;
+		
+	    if (rectangles.size() == 2) {
+	    	leftRect = rectangles.get(0);
+	    	rightRect = rectangles.get(1);
 	        
-	        if (Imgproc.contourArea(contours.get(i)) > 1000 ) {
-	            Rect rect = Imgproc.boundingRect(contours.get(i));
-	            
-	            if (rect.height > 100) {
-	            	Imgproc.rectangle(frame, new Point(rect.x,rect.y), new Point(rect.x+rect.width,rect.y+rect.height), new Scalar(0,0,255), 3);
-	            }
+	    	if (leftRect.x > rightRect.x) {
+	        	Rect temp = rightRect;
+	        	
+	        	rightRect = leftRect;
+	        	leftRect = temp;
 	        }
+	    	
+	        Imgproc.rectangle(frame, new Point(leftRect.x, leftRect.y), 
+	        		new Point(leftRect.x+leftRect.width,leftRect.y+leftRect.height), color, LINE_THICKNESS);
+	    	
+	        Imgproc.rectangle(frame, new Point(rightRect.x, rightRect.y), 
+	        		new Point(rightRect.x+rightRect.width,rightRect.y+rightRect.height), color, LINE_THICKNESS);
 	    }
+	    
+	    if (leftRect != null && rightRect != null) {
+	    	Point centerPoint = getCenterPoint(leftRect, rightRect);
+	    	
+	    	Imgproc.circle(frame, centerPoint, TARGET_RADIUS, color, LINE_THICKNESS);
+	    }
+	    
+	    TargetScope targetScope = new TargetScope();
+	    
+	    targetScope.draw(frame);
 	}
 
 	/**
@@ -82,7 +120,7 @@ public class ObjRecognitionProcessor
 
 		try {
 			// remove some noise
-			Imgproc.blur(frame, blurredImage, new Size(7, 7));
+			Imgproc.blur(frame, blurredImage, new Size(9, 9));
 
 			// convert the frame to HSV
 			Imgproc.cvtColor(blurredImage, hsvImage, Imgproc.COLOR_BGR2HSV);
